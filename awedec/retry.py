@@ -37,7 +37,7 @@ def retry(times = 3, wait_seconds = 5, traced_exceptions = None, reraised_except
                             raise reraised_exception
                         raise
                     time.sleep(wait_seconds)
-                    
+
             if reraised_exception:
                 raise reraised_exception
             raise MaxRetriesReachedException("已经达到最大重试次数")
