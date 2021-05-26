@@ -30,7 +30,7 @@ version = re.search(
 ).group(1)
 
 
-NAME = 'python-awesome-decorators'
+NAME = 'awedec'
 VERSION = version
 DESCRIPTION = 'List of useful decorators in Python.'
 KEYWORDS = 'awesomen decorators'

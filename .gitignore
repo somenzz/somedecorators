@@ -1,2 +1,5 @@
 *__pycache__*
 *.pyc
+awedec.egg-info/
+build/
+dist/
