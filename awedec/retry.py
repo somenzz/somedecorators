@@ -16,12 +16,12 @@ def retry(times = 3, wait_seconds = 5, traced_exceptions = None, reraised_except
     traced_exceptions 为监控的异常，可以为 None（默认）、异常类、或者一个异常类的列表。
     traced_exceptions 如果为 None，则监控所有的异常；如果指定了异常类，则若函数调用抛出指定的异常时，重新调用函数，直至成功返回结果。
     未出现监控的异常时，如果指定定了 reraised_exception 则抛出 reraised_exception，否则抛出原来的异常。
-    最大重试次数用完时，如果指定了 reraised_exception 则抛出 reraised_exception，否则抛出  MaxRetriesReachedException
     '''
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             count = times
+            need_raise = False
             while count > 0:
                 try:
                     return func(*args, **kwargs)
@@ -33,14 +33,14 @@ def retry(times = 3, wait_seconds = 5, traced_exceptions = None, reraised_except
                     elif type(traced_exceptions) == list and type(e) in traced_exceptions:#如果指定了捕捉异常类的列表，则 pass
                         count-=1
                     else: #需要抛出异常 reraised_exception 为 None 则抛出原来的异常，否则只抛出指定的异常
+                        need_raise = True
+
+                    if need_raise or count <= 0:
                         if reraised_exception:
                             raise reraised_exception
                         raise
                     time.sleep(wait_seconds)
-
-            if reraised_exception:
-                raise reraised_exception
-            raise MaxRetriesReachedException("已经达到最大重试次数")
+                    
         return wrapper
     return decorator
 

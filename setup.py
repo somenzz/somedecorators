@@ -33,14 +33,14 @@ version = re.search(
 NAME = 'awedec'
 VERSION = version
 DESCRIPTION = 'List of useful decorators in Python.'
-KEYWORDS = 'awesomen decorators'
+KEYWORDS = 'awesome decorators'
 AUTHOR = 'somenzz'
 AUTHOR_EMAIL = 'somenzz@163.com'
 URL = 'https://github.com/somenzz/awe-decorators'
 LICENSE = text_of('LICENSE')
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
-INSTALL_REQUIRES = ['python-dateutil']
+INSTALL_REQUIRES = []
 TEST_SUITE = 'tests'
 TESTS_REQUIRE = ['pytest']
 

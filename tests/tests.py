@@ -37,8 +37,13 @@ class DecoratorsTests(unittest.TestCase):
         @retry(times = 1, wait_seconds = 1, reraised_exception = MyException)
         def myfunc():
             raise Exception
-            
+
+        @retry(times = 2, wait_seconds = 1)
+        def myfunc2():
+            raise MyException
+
         self.assertRaises(MyException, myfunc)
+        self.assertRaises(MyException, myfunc2)
 
 
 if __name__ == '__main__':
