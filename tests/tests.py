@@ -4,7 +4,7 @@ Testing the decorators utility package.
 
 import unittest
 import time
-from awedec import timeit, retry
+from awesome-decorators import timeit, retry
 
 class MyException(Exception):
     pass
