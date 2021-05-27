@@ -26,11 +26,11 @@ def text_of(relpath):
 # (and thus attempting to import packages it depends on that may not be
 # installed yet)
 version = re.search(
-    "__version__ = '([^']+)'", text_of('awedec/__init__.py')
+    "__version__ = '([^']+)'", text_of('somenzz/decorators/__init__.py')
 ).group(1)
 
 
-NAME = 'awesome-decorators'
+NAME = 'somenzz-decorators'
 VERSION = version
 DESCRIPTION = 'List of useful decorators in Python.'
 KEYWORDS = 'awesome decorators'

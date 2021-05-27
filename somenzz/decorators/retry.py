@@ -13,7 +13,7 @@ def retry(times = 3, wait_seconds = 5, traced_exceptions = None, reraised_except
     重试装饰器
     当被装饰的函数调用抛出指定的异常时，函数会被重新调用。
     直到达到指定的最大调用次数才重新抛出指定的异常，可以指定时间间隔，默认 5 秒后重试。
-    traced_exceptions 为监控的异常，可以为 None（默认）、异常类、或者一个异常类的列表。
+    traced_exceptions 为监控的异常，可以为 None（默认）、异常类、或者一个异常类的元组。
     traced_exceptions 如果为 None，则监控所有的异常；如果指定了异常类，则若函数调用抛出指定的异常时，重新调用函数，直至成功返回结果。
     未出现监控的异常时，如果指定定了 reraised_exception 则抛出 reraised_exception，否则抛出原来的异常。
     '''
@@ -29,8 +29,6 @@ def retry(times = 3, wait_seconds = 5, traced_exceptions = None, reraised_except
                     if traced_exceptions is None:#说明要捕捉所有异常，直接 pass
                         count-=1
                     elif isinstance(e,traced_exceptions):#如果指定了捕捉的异常类，则 pass
-                        count-=1
-                    elif type(traced_exceptions) == list and type(e) in traced_exceptions:#如果指定了捕捉异常类的列表，则 pass
                         count-=1
                     else: #需要抛出异常 reraised_exception 为 None 则抛出原来的异常，否则只抛出指定的异常
                         need_raise = True
