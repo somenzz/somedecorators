@@ -28,8 +28,13 @@ def retry(times = 3, wait_seconds = 5, traced_exceptions = None, reraised_except
                 except Exception as e:
                     if traced_exceptions is None:#说明要捕捉所有异常，直接 pass
                         count-=1
+
+                    elif type(traced_exceptions) == list and type(e) in traced_exceptions:#如果指定了捕捉异常类的列表，则 pass
+                        count-=1
+          
                     elif isinstance(e,traced_exceptions):#如果指定了捕捉的异常类，则 pass
                         count-=1
+                    
                     else: #需要抛出异常 reraised_exception 为 None 则抛出原来的异常，否则只抛出指定的异常
                         need_raise = True
 
