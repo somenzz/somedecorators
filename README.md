@@ -1,5 +1,8 @@
-# awe-decorators
-some very useful decorators for python (一些非常实用的 Python 装饰器)
+# somedecorators
+
+some very useful decorators for python 
+
+一些非常实用的 Python 装饰器，持续更新
 
 ## 安装
 
@@ -61,7 +64,7 @@ test_retry()
 
 #### email_on_exception
 
-报错发邮件装饰器。当被装饰的函数调用抛出指定的异常时，函数发送邮件给指定的人员。
+报错发邮件装饰器。当被装饰的函数调用抛出指定的异常时，函数发送邮件给指定的人员，使用独立的 [djangomail](https://github.com/somenzz/djangomail) 发邮件模块，非常好用。
 
 - recipient_list: 一个字符串列表，每项都是一个邮箱地址。recipient_list 中的每个成员都可以在邮件的 "收件人:" 中看到其他的收件人。
 - traced_exceptions 为监控的异常，可以为 None（默认）、异常类、或者一个异常类的元组。
