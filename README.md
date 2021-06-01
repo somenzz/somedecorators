@@ -4,7 +4,7 @@ some very useful decorators for python (一些非常实用的 Python 装饰器)
 ## 安装
 
 ```sh
-pip install somenzz-decorators
+pip install somedecorators
 ```
 
 ## 装饰器介绍：

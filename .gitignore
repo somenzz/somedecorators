@@ -1,6 +1,9 @@
 *__pycache__*
 *.pyc
-awedec.egg-info/
+*.egg-info/
 build/
 dist/
 .tox/
+.DS_Store
+.eggs/
+.vscode/
