@@ -25,7 +25,7 @@ DESCRIPTION = 'Some useful decorators in Python.'
 KEYWORDS = 'awesome decorators'
 AUTHOR = 'somenzz'
 AUTHOR_EMAIL = 'somenzz@163.com'
-URL = 'https://github.com/somenzz/awe-decorators'
+URL = 'https://github.com/somenzz/somedecorators'
 LICENSE = license.read_text()
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
