@@ -1,13 +1,12 @@
-
-
-
 from functools import wraps
 import time
 
-def timeit(logger = None):
-    '''
+
+def timeit(logger=None):
+    """
     耗时统计装饰器，单位是秒，保留 4 位小数
-    '''
+    """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -19,6 +18,7 @@ def timeit(logger = None):
             else:
                 print(f"{func.__name__} cost {end - start :.4f} seconds")
             return result
-        return wrapper
-    return decorator
 
+        return wrapper
+
+    return decorator

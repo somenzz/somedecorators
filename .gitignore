@@ -3,3 +3,4 @@
 awedec.egg-info/
 build/
 dist/
+.tox/

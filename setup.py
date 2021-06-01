@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import os
-import re
+
+from pathlib import Path
 try:
     from setuptools import setup
     from setuptools import find_packages
@@ -10,42 +10,31 @@ except ImportError:
                       "Please install the setuptools package.")
 
 
-def text_of(relpath):
-    """
-    Return string containing the contents of the file at *relpath* relative to
-    this file.
-    """
-    thisdir = os.path.dirname(__file__)
-    file_path = os.path.join(thisdir, os.path.normpath(relpath))
-    with open(file_path) as f:
-        text = f.read()
-    return text
+readme = Path("README.md")
+license = Path("LICENSE")
 
 
 # Read the version without importing the package
 # (and thus attempting to import packages it depends on that may not be
 # installed yet)
-version = re.search(
-    "__version__ = '([^']+)'", text_of('somenzz/decorators/__init__.py')
-).group(1)
+version = "0.3"
 
-
-NAME = 'somenzz-decorators'
+NAME = 'somedecorators'
 VERSION = version
-DESCRIPTION = 'List of useful decorators in Python.'
+DESCRIPTION = 'Some useful decorators in Python.'
 KEYWORDS = 'awesome decorators'
 AUTHOR = 'somenzz'
 AUTHOR_EMAIL = 'somenzz@163.com'
 URL = 'https://github.com/somenzz/awe-decorators'
-LICENSE = text_of('LICENSE')
+LICENSE = license.read_text()
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = ['djangomail']
 TEST_SUITE = 'tests'
-TESTS_REQUIRE = ['pytest']
+TESTS_REQUIRE = []
 
 CLASSIFIERS = [
-    'Development Status :: 1 - Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
@@ -57,7 +46,7 @@ CLASSIFIERS = [
     'Topic :: Utilities',
 ]
 
-LONG_DESCRIPTION = text_of('README.md')
+LONG_DESCRIPTION = readme
 
 
 params = {
@@ -74,7 +63,8 @@ params = {
     'tests_require':    TESTS_REQUIRE,
     'test_suite':       TEST_SUITE,
     'classifiers':      CLASSIFIERS,
+    'long_description': readme.read_text()
 }
 
 if __name__ == '__main__':
-    setup(**params)
+    setup(**params,long_description_content_type='text/markdown')

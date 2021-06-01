@@ -1,6 +1,3 @@
-
 from .retry import retry
 from .timeit import timeit
-
-__version__ = '0.2'
-
+from .email import email_on_exception

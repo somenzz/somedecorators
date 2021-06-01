@@ -4,7 +4,10 @@ Testing the decorators utility package.
 
 import unittest
 import time
-from somenzz.decorators import timeit, retry
+from somedecorators import timeit, retry, email_on_exception
+
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 class MyException(Exception):
     pass
@@ -45,7 +48,16 @@ class DecoratorsTests(unittest.TestCase):
         self.assertRaises(MyException, myfunc)
         self.assertRaises(MyException, myfunc2)
 
+    def test_email_on_exception(self):
 
+        @email_on_exception(['somenzz@163.com'])
+        def myfunc():
+            1/0
+
+        with self.assertRaises(ZeroDivisionError):
+            myfunc()
+
+        
 if __name__ == '__main__':
     unittest.main()
 
