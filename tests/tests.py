@@ -50,12 +50,11 @@ class DecoratorsTests(unittest.TestCase):
 
     def test_email_on_exception(self):
 
-        @email_on_exception(['somenzz@163.com'])
-        def myfunc():
-            1/0
-
+        @email_on_exception(['somenzz@163.com'],extra_msg="严重错误")
+        def myfunc(arg):
+            return 1/arg
         with self.assertRaises(ZeroDivisionError):
-            myfunc()
+            myfunc(arg = 0)
 
         
 if __name__ == '__main__':

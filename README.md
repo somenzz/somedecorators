@@ -91,40 +91,91 @@ SERVER_EMAIL = EMAIL_HOST_USER
 
 然后主程序中这样使用：
 
+##### 监控所有的异常
+
 ```python
 from somedecorators import email_on_exception 
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 @email_on_exception(['somenzz@163.com'])
-def myfunc():
-    1/0
+def myfunc(arg):
+    1/arg
 
-myfunc()
+myfunc(0)
 ```
 
 你会收到如下的邮件信息，非常便于排查错误。
 
 ```sh
-Subject: myfunc's Exception
+Subject: myfunc(arg=0) raise Exception
 From: your-username
 To: somenzz@163.com
-Date: Tue, 01 Jun 2021 03:49:38 -0500
+Date: Fri, 11 Jun 2021 20:55:01 -0500
 Message-ID: 
- <162253737847.42472.17544735601910942318@1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa>
+ <162346290112.13869.15957310483971819045@1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa>
 
-myfunc's Exception: division by zero 
+myfunc(arg=0) raise Exception: division by zero 
  traceback:
  Traceback (most recent call last):
-  File "/Users/aaron/py38env/lib/python3.8/site-packages/somedecorators-0.3-py3.8.egg/somedecorators/email.py", line 22, in wrapper
+  File "/Users/aaron/github/somenzz/somedecorators/somedecorators/email.py", line 35, in wrapper
     return func(*args, **kwargs)
-  File "tests.py", line 55, in myfunc
-    1/0
+  File "/Users/aaron/github/somenzz/somedecorators/tests/tests.py", line 55, in myfunc
+    return 1/arg
 ZeroDivisionError: division by zero
 
+extra_msg = 严重错误
 ```
 
+##### 监控指定的异常
 
+```python
+
+from somedecorators import email_on_exception
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+
+class Exception1(Exception):
+    pass
+
+class Exception2(Exception):
+    pass
+
+class Exception3(Exception):
+    pass
+
+@email_on_exception(['somenzz@163.com'],traced_exceptions = Exception2)
+def myfunc(args):
+    if args == 1:
+        raise Exception1
+    elif args == 2:
+        raise Exception2
+    else:
+        raise Exception3
+
+myfunc(2)
+
+```
+上述代码只有在 raise Exception2 时才会发送邮件：
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1grdbh8d2foj31de0l2myd.jpg)
+
+##### 不同的异常发给不同的人
+
+
+```python
+@email_on_exception(['somenzz@163.com'],traced_exceptions = Exception2)
+@email_on_exception(['others@163.com'],traced_exceptions = (Exception1, Exception3))
+def myfunc(args):
+    if args == 1:
+        raise Exception1
+    elif args == 2:
+        raise Exception2
+    else:
+        raise Exception3
+```
+
+是不是非常方便？
 
 ## 参与项目
 

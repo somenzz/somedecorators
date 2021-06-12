@@ -17,7 +17,7 @@ license = Path("LICENSE")
 # Read the version without importing the package
 # (and thus attempting to import packages it depends on that may not be
 # installed yet)
-version = "0.5"
+version = "0.6"
 
 NAME = 'somedecorators'
 VERSION = version
@@ -39,8 +39,7 @@ CLASSIFIERS = [
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
     'Programming Language :: Python',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3',
     'Topic :: Software Development',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities',
@@ -57,7 +56,7 @@ params = {
     'author':           AUTHOR,
     'author_email':     AUTHOR_EMAIL,
     'url':              URL,
-    'license':          LICENSE,
+    'license':          "MIT",
     'packages':         PACKAGES,
     'install_requires': INSTALL_REQUIRES,
     'tests_require':    TESTS_REQUIRE,
