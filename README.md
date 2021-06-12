@@ -158,10 +158,7 @@ myfunc(2)
 ```
 上述代码只有在 raise Exception2 时才会发送邮件：
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1grdbh8d2foj31de0l2myd.jpg)
-
 ##### 不同的异常发给不同的人
-
 
 ```python
 @email_on_exception(['somenzz@163.com'],traced_exceptions = Exception2)
