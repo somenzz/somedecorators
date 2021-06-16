@@ -1,5 +1,13 @@
 from functools import wraps
 import time
+import signal
+
+
+class TimeoutError(Exception):
+    """
+    An operation timed out
+    """
+    pass
 
 
 def timeit(logger=None):
@@ -22,3 +30,29 @@ def timeit(logger=None):
         return wrapper
 
     return decorator
+
+
+
+def timeout(seconds):
+    """
+    Raises a TimeoutError if a function does not terminate within
+    specified seconds.
+    """
+    def _timeout_error(signal, frame):
+        raise TimeoutError("Operation did not finish within {} seconds".format(seconds))
+
+    def timeout_decorator(func):
+
+        @wraps(func)
+        def timeout_wrapper(*args, **kwargs):
+            signal.signal(signal.SIGALRM, _timeout_error)
+            signal.alarm(seconds)
+            try:
+                return func(*args, **kwargs)
+            finally:
+                signal.alarm(0)
+
+        return timeout_wrapper
+
+    return timeout_decorator
+

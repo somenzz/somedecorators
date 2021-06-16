@@ -33,6 +33,24 @@ def test_timeit():
 ```
 
 
+#### timeout
+
+超时装饰器，单位是秒，函数运行超过指定的时间会抛出 TimeOutError 异常。
+
+使用方法：
+
+```python
+import time
+from somedecorators import timeout
+@timeout(2)
+def test_timeit():
+    time.sleep(3)
+
+#somedecorators.timeit.TimeoutError: Operation did not finish within 2 seconds
+```
+
+
+
 #### retry
 
 重试装饰器

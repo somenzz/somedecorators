@@ -19,11 +19,12 @@ def args_to_str(*args,**kwargs):
 
 def email_on_exception(recipient_list, traced_exceptions=None,extra_msg = None):
     """
-    报错发邮件装饰器
-    当被装饰的函数调用抛出指定的异常时，函数发送邮件给指定的人员
-    recipient_list: 一个字符串列表，每项都是一个邮箱地址。recipient_list 中的每个成员都可以在邮件的 "收件人:" 中看到其他的收件人。
-    traced_exceptions 为监控的异常，可以为 None（默认）、异常类、或者一个异常类的元组。
-    traced_exceptions 如果为 None，则监控所有的异常；如果指定了异常类，则若函数调用抛出指定的异常时，发送邮件。
+    当被装饰的函数调用抛出指定的异常时，发送邮件给指定的人员
+    recipient_list: 必选，一个字符串列表，每项都是一个邮箱地址。
+    traced_exceptions: 可选，为监控的异常，可以为 None（默认）、异常类、或者一个异常类的元组。
+                       如果为 None，则监控所有的异常； 
+                       如果指定了异常类，则函数调用抛出指定的异常时，发送邮件。
+    extra_msg: 可选，额外的信息。
     """
 
     def decorator(func):

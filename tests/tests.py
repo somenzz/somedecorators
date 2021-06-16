@@ -4,7 +4,9 @@ Testing the decorators utility package.
 
 import unittest
 import time
-from somedecorators import timeit, retry, email_on_exception
+from somedecorators import timeit, retry, email_on_exception,timeout
+from somedecorators import TimeoutError
+
 
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
@@ -47,6 +49,17 @@ class DecoratorsTests(unittest.TestCase):
 
         self.assertRaises(MyException, myfunc)
         self.assertRaises(MyException, myfunc2)
+
+    def test_timeout(self):
+
+        @timeout(2)
+        def do_something(args):
+            time.sleep(args)
+
+        with self.assertRaises(TimeoutError):
+            do_something(3)
+
+
 
     def test_email_on_exception(self):
 
