@@ -17,7 +17,7 @@ license = Path("LICENSE")
 # Read the version without importing the package
 # (and thus attempting to import packages it depends on that may not be
 # installed yet)
-version = "0.8"
+version = "0.9"
 
 NAME = 'somedecorators'
 VERSION = version
