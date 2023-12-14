@@ -4,6 +4,8 @@ some very useful decorators for python
 
 一些非常实用的 Python 装饰器，持续更新
 
+- 新增 wechat_on_exception  from somedecorators import wechat_on_exception
+
 ## 安装
 
 ```sh
@@ -96,8 +98,8 @@ traced_exceptions 如果为 None，则监控所有的异常；如果指定了异
 EMAIL_USE_LOCALTIME = True
 
 #for unitest
-EMAIL_BACKEND = 'djangomail.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'djangomail.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'djangomail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'djangomail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.163.com' #可以换其他邮箱
 EMAIL_PORT = 465
@@ -105,6 +107,13 @@ EMAIL_HOST_USER = 'your-username'
 EMAIL_HOST_PASSWORD = '********'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
+
+
+# 用于发送企业微信
+CORPID="**********************"  # 企业 ID
+APPID="*******"  # 企业应用 ID
+CORPSECRET="************************" # 企业应用 Secret
+
 ```
 
 然后主程序中这样使用：
@@ -191,6 +200,22 @@ def myfunc(args):
 ```
 
 是不是非常方便？
+
+#### 发送企业微信
+
+```python
+@wechat_on_exception(['企业微信接收者ID'],traced_exceptions = Exception2)
+def myfunc(args):
+    if args == 1:
+        raise Exception1
+    elif args == 2:
+        raise Exception2
+    else:
+        raise Exception3
+```
+
+
+
 
 ## 参与项目
 
