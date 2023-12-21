@@ -17,7 +17,7 @@ license = Path("LICENSE")
 # Read the version without importing the package
 # (and thus attempting to import packages it depends on that may not be
 # installed yet)
-version = "1.0"
+version = "1.2"
 
 NAME = 'somedecorators'
 VERSION = version
@@ -30,7 +30,7 @@ LICENSE = license.read_text()
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 INSTALL_REQUIRES = [
-         'djangomail', 
+         'djangomail==0.8', 
          'wechat-enterprise-sdk==0.4'
       ]
 TEST_SUITE = 'tests'

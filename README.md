@@ -92,7 +92,7 @@ traced_exceptions 如果为 None，则监控所有的异常；如果指定了异
 
 **使用方法**：
 
-首先在项目目录新建 settings.py，配置邮件服务器，内容如下：
+首先在项目目录新建 settings.py，配置邮件服务器或企业微信，内容如下：
 
 ```python
 EMAIL_USE_LOCALTIME = True
@@ -116,14 +116,19 @@ CORPSECRET="************************" # 企业应用 Secret
 
 ```
 
+如果你的文件名不是 settings.py，假如是 mysettings.py 则需要修改环境变量:
+
+```python
+os.environ.setdefault("SETTINGS_MODULE", "mysettings")
+```
 然后主程序中这样使用：
 
 ##### 监控所有的异常
 
 ```python
 from somedecorators import email_on_exception 
-import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+#import os
+#os.environ.setdefault("SETTINGS_MODULE", "settings") #默认配置，可以不写此行代码
 
 @email_on_exception(['somenzz@163.com'])
 def myfunc(arg):
@@ -160,7 +165,7 @@ extra_msg = 严重错误
 
 from somedecorators import email_on_exception
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+os.environ.setdefault("SETTINGS_MODULE", "settings")
 
 class Exception1(Exception):
     pass
@@ -202,6 +207,20 @@ def myfunc(args):
 是不是非常方便？
 
 #### 发送企业微信
+
+发送前需要在 settings.py 文件企业微信相关信息
+
+settings.py 示例：
+
+```python
+
+CORPID="**********************"  # 企业 ID
+APPID="*******"  # 企业应用 ID
+CORPSECRET="************************" # 企业应用 Secret
+
+```
+
+调用代码 
 
 ```python
 @wechat_on_exception(['企业微信接收者ID'],traced_exceptions = Exception2)
