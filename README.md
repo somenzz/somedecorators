@@ -234,6 +234,15 @@ def myfunc(args):
 ```
 
 
+#### setup_logger
+
+一个简单的使用日志的方法
+
+```python
+from somedecorators import setup_logger
+logger = setup_logger("myapp")
+logger.info("hello this is myapp log")
+```
 
 
 ## 参与项目
