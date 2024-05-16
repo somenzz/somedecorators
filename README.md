@@ -1,10 +1,15 @@
 # somedecorators
 
-some very useful decorators for python 
+Some very useful Python decorators, functions, classes, continuously updated.
 
-一些非常实用的 Python 装饰器，持续更新
 
-- 新增 wechat_on_exception  from somedecorators import wechat_on_exception
+一些非常实用的 Python 装饰器、函数、类，持续更新。
+
+- 新增 wechat_on_exception，报错发送企业微信 :  from somedecorators import wechat_on_exception
+- 新增 setup_logger，快速配置日志  : from somedecorators import setup_logger  
+- 新增 ConfigManager，快速搞定配置文件 : from somedecorators import ConfigManager 
+
+使用方法如下：
 
 ## 安装
 
@@ -234,7 +239,7 @@ def myfunc(args):
 ```
 
 
-#### setup_logger
+#### 快速配置日志 setup_logger
 
 一个简单的使用日志的方法
 
@@ -242,11 +247,24 @@ def myfunc(args):
 from somedecorators import setup_logger
 logger = setup_logger("myapp")
 logger.info("hello this is myapp log")
+logger2 = setup_logger("myapp2", log_path="./log/app.log")
+logger3 = setup_logger("myapp3",handlers=['console']) 
+logger4 = setup_logger("myapp4",handlers=['console','file']) 
 ```
 
+#### 快速搞定配置文件
+
+```python
+from somedecorators import ConfigManager
+config_manager = ConfigManager("config.yml")
+config_data = config_manager.get_all()
+print(config_data)
+```
 
 ## 参与项目
 
-欢迎分享你最常用的装饰器，加入到这里。
+欢迎分享你最常用的装饰器、类、函数，加入到这里。
 
+## 联系我 
 
+微信：somenzz-enjoy

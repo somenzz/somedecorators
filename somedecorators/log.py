@@ -2,9 +2,8 @@ import logging.config
 import os
 import sys
 
-
-def setup_logger(name=""):
-    os.makedirs("logs", exist_ok=True)
+def setup_logger(name="", log_path="logs/application.log", handlers=["console", "file"]):
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
     LOGGING_CONFIG = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -27,7 +26,7 @@ def setup_logger(name=""):
                 "class": "logging.handlers.RotatingFileHandler",
                 "level": "INFO",
                 "formatter": "detailed",
-                "filename": "logs/application.log",
+                "filename": log_path,
                 "maxBytes": 10485760,  # 10MB
                 "backupCount": 5,
                 "encoding": "utf8",
@@ -35,7 +34,7 @@ def setup_logger(name=""):
         },
         "loggers": {
             "": {  # root logger
-                "handlers": ["console", "file"],
+                "handlers": handlers,
                 "level": "DEBUG",
                 "propagate": True,
             }
@@ -45,7 +44,6 @@ def setup_logger(name=""):
     logging.config.dictConfig(LOGGING_CONFIG)
     return logging.getLogger(name)
 
-
 def handle_exception(exc_type, exc_value, exc_traceback):
     """Log any uncaught exceptions."""
     if issubclass(exc_type, KeyboardInterrupt):
@@ -54,7 +52,6 @@ def handle_exception(exc_type, exc_value, exc_traceback):
         return
     logger = setup_logger()
     logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
-
 
 # Set the global exception hook to our custom function
 sys.excepthook = handle_exception
