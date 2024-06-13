@@ -5,6 +5,7 @@ Some very useful Python decorators, functions, classes, continuously updated.
 
 一些非常实用的 Python 装饰器、函数、类，持续更新。
 
+- 新增 robot_on_exception，报错通过企业微信机器人发送至企业微信群聊 :  from somedecorators import robot_on_exception
 - 新增 wechat_on_exception，报错发送企业微信 :  from somedecorators import wechat_on_exception
 - 新增 setup_logger，快速配置日志  : from somedecorators import setup_logger  
 - 新增 ConfigManager，快速搞定配置文件 : from somedecorators import ConfigManager 
@@ -18,6 +19,23 @@ pip install somedecorators
 ```
 
 ## 装饰器介绍：
+
+#### 发送企业微信机器人
+
+调用代码 
+mentioned_list 参数可以不填写。
+```python
+@robot_on_exception(webhook_url= "你的企业威胁你机器人 webhook",mentioned_list=["@谁就填写谁的企业微信账号","user2"], extra_msg="运行报错")
+def myfunc(args):
+    if args == 1:
+        raise Exception1
+    elif args == 2:
+        raise Exception2
+    else:
+        raise Exception3
+```
+
+
 
 #### timeit
 
