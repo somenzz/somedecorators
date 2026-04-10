@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       contents: write  # Required for creating GitHub Releases
       id-token: write  # Required for Trusted Publishing to PyPI
