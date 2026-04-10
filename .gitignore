@@ -1,0 +1,16 @@
+*__pycache__*
+*.pyc
+*.egg-info/
+build/
+dist/
+.tox/
+.DS_Store
+.eggs/
+.vscode/
+.idea/
+logs
+.env
+venv
+logging.yaml
+settings.py
+tmp/

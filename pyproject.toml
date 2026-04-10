@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "somedecorators"
+version = "2.1.0"
+description = "Useful Python decorators for logging, retry, timing"
+authors = [{name = "aaron"}]
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+    'djangomail>=0.8', 
+    'wechat-enterprise-sdk==0.4.2',
+    'PyYAML==6.0.1',
+    'requests'
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
