@@ -1,15 +1,18 @@
-"""
-Testing the decorators utility package.
-"""
-
+import os
+import time
 import unittest
-import time,os
-from somedecorators import timeit, retry, email_on_exception,timeout
-from somedecorators import TimeoutError
-from somedecorators import wechat_on_exception
+from unittest.mock import MagicMock, patch
 import dotenv
-dotenv.load_dotenv()
+from somedecorators import (
+    TimeoutError,
+    email_on_exception,
+    retry,
+    timeit,
+    timeout,
+    wechat_on_exception,
+)
 
+dotenv.load_dotenv()
 
 
 class MyException(Exception):
@@ -17,34 +20,21 @@ class MyException(Exception):
 
 
 class DecoratorsTests(unittest.TestCase):
-    """
-    Basic decorators utility tests.
-    """
-
     def test_timeit(self):
-        """
-        Test the timeit decorator
-        """
-
         @timeit()
         def myfunc():
-            time.sleep(1)
+            time.sleep(0.01)
             return "done"
-        
+
         output = myfunc()
-        self.assertEqual(len(output), 4)
         self.assertEqual(output, "done")
 
     def test_retry(self):
-        """
-        Test the timeit decorator
-        """
-
-        @retry(times = 1, wait_seconds = 1, reraised_exception = MyException)
+        @retry(times=1, wait_seconds=0, reraised_exception=MyException)
         def myfunc():
             raise Exception
 
-        @retry(times = 2, wait_seconds = 1)
+        @retry(times=2, wait_seconds=0)
         def myfunc2():
             raise MyException
 
@@ -52,37 +42,38 @@ class DecoratorsTests(unittest.TestCase):
         self.assertRaises(MyException, myfunc2)
 
     def test_timeout(self):
-
-        @timeout(2)
+        @timeout(1)
         def do_something(args):
             time.sleep(args)
 
         with self.assertRaises(TimeoutError):
-            do_something(3)
+            do_something(2)
 
+    @patch("somedecorators.wechat.WechatEnterprise")
+    def test_wechat_on_exception(self, mock_wechat_cls):
+        mock_we = MagicMock()
+        mock_wechat_cls.return_value = mock_we
 
-
-    def test_wechat_on_exception(self):
-
-        @wechat_on_exception([os.getenv("wechat_receiver")],extra_msg="严重错误")
+        @wechat_on_exception(["receiver1"], extra_msg="Severe Error")
         def myfunc(arg):
-            print("begin test wechat on exception")
-            return 1/arg
+            return 1 / arg
+
         with self.assertRaises(ZeroDivisionError):
-            myfunc(arg = 0)
+            myfunc(arg=0)
 
+        mock_we.send_text.assert_called_once()
 
-    def test_email_on_exception(self):
-
-        @email_on_exception([os.getenv("email_recerver")],extra_msg="严重错误")
+    @patch("somedecorators.email.send_mail")
+    def test_email_on_exception(self, mock_send_mail):
+        @email_on_exception(["test@example.com"], extra_msg="Severe Error")
         def myfunc(arg):
-            print("begin test email on exception")
-            return 1/arg
+            return 1 / arg
+
         with self.assertRaises(ZeroDivisionError):
-            myfunc(arg = 0)
+            myfunc(arg=0)
+
+        mock_send_mail.assert_called_once()
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

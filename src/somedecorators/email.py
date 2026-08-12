@@ -1,61 +1,38 @@
 from functools import wraps
+from typing import Any, Callable, List, Optional, Sequence, Tuple, Type, Union
 from djangomail import send_mail
 from .conf import settings
-import traceback
+from .utils import args_to_str, format_exception_message, should_catch_exception
 
-def args_to_str(*args,**kwargs):
-    str1 = ", ".join(str(i) for i in args)
-    kv = []
-    for k,v in kwargs.items():
-        kv.append(f"{k}={v}")
-    str2 = ", ".join(kv)
-    if kwargs and args:
-        return f"{str1}, {str2}"
-    if args:
-        return str1
-    if kwargs:
-        return str2
-    return ''
 
-def email_on_exception(recipient_list, traced_exceptions=None,extra_msg = None):
+def email_on_exception(
+    recipient_list: List[str],
+    traced_exceptions: Optional[Union[Type[BaseException], Sequence[Type[BaseException]], Tuple[Type[BaseException], ...]]] = None,
+    extra_msg: Optional[str] = None,
+) -> Callable:
     """
-    当被装饰的函数调用抛出指定的异常时，发送邮件给指定的人员
-    recipient_list: 必选，一个字符串列表，每项都是一个邮箱地址。
-    traced_exceptions: 可选，为监控的异常，可以为 None（默认）、异常类、或者一个异常类的元组。
-                       如果为 None，则监控所有的异常； 
-                       如果指定了异常类，则函数调用抛出指定的异常时，发送邮件。
-    extra_msg: 可选，额外的信息。
+    Decorator that sends an email notification via djangomail when the decorated function raises a matching exception.
+
+    :param recipient_list: List of recipient email addresses.
+    :param traced_exceptions: Exception or collection of exceptions to monitor (default: None, catches all).
+    :param extra_msg: Optional extra message string appended to the email body.
     """
 
-    def decorator(func):
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            recipients = recipient_list
-            send = False
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                if traced_exceptions is None:  # 说明要捕捉所有异常
-                    send = True
-                elif type(traced_exceptions) == list:
-                    if type(e) in traced_exceptions:# 如果指定了捕捉异常类的列表
-                        send = True
-                elif isinstance(e, traced_exceptions):  # 如果指定了捕捉的异常类
-                    send = True
-                else:
-                    send = False
-                if send:
-
-                    message = f"{func.__name__}({args_to_str(*args, **kwargs)}) raise Exception: {e} \n" \
-                              f"traceback:\n {traceback.format_exc()}\n"
-                    if extra_msg:
-                        message = f"{message}{extra_msg}"
-
+                if should_catch_exception(e, traced_exceptions):
+                    message = format_exception_message(func, args, kwargs, e, extra_msg=extra_msg)
+                    subject_args = args_to_str(*args, **kwargs)
+                    subject = f"{func.__name__}({subject_args}) raise Exception" if subject_args else f"{func.__name__}() raise Exception"
                     send_mail(
-                        subject=f"{func.__name__}({args_to_str(*args, **kwargs)}) raise Exception",
+                        subject=subject,
                         message=message,
                         from_email=settings.DEFAULT_FROM_EMAIL,
-                        recipient_list=recipients,
+                        recipient_list=recipient_list,
                     )
                 raise
 

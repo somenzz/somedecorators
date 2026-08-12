@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "pytest-cov"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

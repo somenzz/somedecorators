@@ -1,49 +1,62 @@
+import copy
 import json
-import yaml
 import os
+from typing import Any, Dict, Optional
+import yaml
 
 
 class ConfigManager:
-    _instance = None
+    """
+    Singleton configuration manager for loading JSON or YAML config files.
+    """
+    _instance: Optional["ConfigManager"] = None
+    _filepath: Optional[str] = None
+    _config: Dict[str, Any] = {}
 
-    def __new__(cls, filepath="./config.yml"):
-        if cls._instance is None:
-            cls._instance = super(ConfigManager, cls).__new__(cls)
-            cls._instance._config = cls._load_config(filepath) if filepath else {}
+    def __new__(cls, filepath: Optional[str] = "./config.yml") -> "ConfigManager":
+        if cls._instance is None or (filepath is not None and filepath != cls._filepath):
+            instance = super(ConfigManager, cls).__new__(cls)
+            if filepath:
+                instance._config = cls._load_config(filepath)
+                instance._filepath = filepath
+            else:
+                instance._config = {}
+                instance._filepath = None
+            cls._instance = instance
         return cls._instance
 
+    @classmethod
+    def reset(cls) -> None:
+        """Reset the singleton instance (useful for unit tests and reloading)."""
+        cls._instance = None
+        cls._filepath = None
+        cls._config = {}
+
     @staticmethod
-    def _load_config(filepath):
+    def _load_config(filepath: str) -> Dict[str, Any]:
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"Configuration file '{filepath}' not found.")
 
-        file_ext = os.path.splitext(filepath)[1]
+        file_ext = os.path.splitext(filepath)[1].lower()
         with open(filepath, "r", encoding="utf-8") as file:
             if file_ext == ".json":
-                return json.load(file)
+                data = json.load(file)
             elif file_ext in [".yml", ".yaml"]:
-                return yaml.safe_load(file)
+                data = yaml.safe_load(file)
             else:
-                raise ValueError("Unsupported file format. Please use JSON or YAML.")
+                raise ValueError(f"Unsupported file format '{file_ext}'. Please use JSON or YAML.")
 
-    def get(self, key):
-        return self._config.get(key)
-        # return copy.deepcopy(self._config.get(key))
+        return data if isinstance(data, dict) else {}
 
-    def get_all(self):
-        return self._config
-        # return copy.deepcopy(self._config)
+    def get(self, key: str, default: Any = None) -> Any:
+        """
+        Get a configuration value by key. Returns a deep copy of the value.
+        """
+        val = self._config.get(key, default)
+        return copy.deepcopy(val)
 
-
-# Example usage
-# config_manager = ConfigManager('path_to_config_file.json')
-# value = config_manager.get('some_key')
-# all_config = config_manager.get_all()
-
-
-# Example usage:
-if __name__ == "__main__":
-    config_manager = ConfigManager("config.yml")
-    # Access configuration values
-    config_data = config_manager.get_all()
-    print(config_data)
+    def get_all(self) -> Dict[str, Any]:
+        """
+        Get all configuration options. Returns a deep copy of the configuration dictionary.
+        """
+        return copy.deepcopy(self._config)
